@@ -4,11 +4,11 @@ from constructs import Construct
 from aws_cdk import (
     Stage
 )
-from .cdk_workshop_stack import CdkWorkshopStack
+from .test_stack import TestStack
 
 class WorkshopPipelineStage(Stage):
 
     def __init__(self, scope: Construct, id: str, **kwargs):
         super().__init__(scope, id, **kwargs)
 
-        service = CdkWorkshopStack(self, 'WebService')
+        service = TestStack(self, 'WebService')
