@@ -4,9 +4,9 @@ from aws_cdk import (
     aws_codecommit as codecommit,
     pipelines as pipelines
 )
+from test.pipeline_stage import WorkshopPipelineStage
 
 class WorkshopPipelineStack(Stack):
-
     def __init__(self, scope: Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
@@ -29,3 +29,6 @@ class WorkshopPipelineStack(Stack):
                 ]
             )
         )
+
+        deploy = WorkshopPipelineStage(self, "Deploy")
+        deploy_stage = pipeline.add_stage(deploy)
