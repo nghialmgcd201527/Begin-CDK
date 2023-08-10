@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
 
 import aws_cdk as cdk
-
-from test.test_stack import TestStack
-
+from test.pipeline_stack import WorkshopPipelineStack
 
 app = cdk.App()
-TestStack(app, "test")
+WorkshopPipelineStack(app, "WorkshopPipelineStack")
 
 app.synth()
