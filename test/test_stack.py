@@ -1,6 +1,7 @@
 from constructs import Construct
 from aws_cdk import ( 
     Stack,
+    CfnOutput,
     aws_lambda as _lambda,
     aws_apigateway as apigw
 )
@@ -9,6 +10,13 @@ from .hitcounter import HitCounter
 from cdk_dynamo_table_view import TableViewer
 
 class TestStack(Stack):
+    @property
+    def hc_endpoint(self):
+        return self._hc_endpoint
+    
+    @property
+    def hc_viewer_url(self):
+        return self._hc_viewer_url
 
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
@@ -25,15 +33,27 @@ class TestStack(Stack):
             downstream=my_lambda                            
         )
 
-        apigw.LambdaRestApi(
+        gateway = apigw.LambdaRestApi(
             self, 'Endpoint',
-            handler=hello_with_counter.handler
+            handler=hello_with_counter._handler
         )
 
-        TableViewer(
+        tv = TableViewer(
             self, 'ViewHitCounter',
             title='Hello Hits',
             table=hello_with_counter.table
         )
+
+        self._hc_endpoint = CfnOutput(
+            self, 'GatewayUrl',
+            value=gateway.url
+        )
+
+        self._hc_viewer_url = CfnOutput(
+            self, 'TableViewerUrl',
+            value=tv.endpoint
+        )
+
+        
 
         
